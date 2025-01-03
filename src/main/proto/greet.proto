@@ -1,0 +1,33 @@
+//syntax = "proto3";
+//
+//option java_package = "com.stoock.greet";
+//option java_outer_classname = "GreetProto";
+//
+//service Greeter {
+//  rpc SayHello (HelloRequest) returns (HelloResponse);
+//}
+//
+//message HelloRequest {
+//  string name = 1;
+//}
+//
+//message HelloResponse {
+//  string message = 1;
+//}
+syntax = "proto3";
+
+option java_package = "com.stoock.greet";
+option java_outer_classname = "GreetProto";
+
+service Greeter {
+  rpc SendNotification(Notification) returns (Empty); // Postman에서 요청을 처리
+  rpc StreamNotifications(Empty) returns (stream Notification); // 클라이언트로 스트리밍
+}
+
+message Notification {
+  string roomId = 1;
+  string message = 2;
+}
+
+message Empty {}
+
