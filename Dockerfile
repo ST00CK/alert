@@ -1,21 +1,18 @@
-# 1단계: Gradle 빌드 이미지
-FROM gradle:7.6.0-jdk17 AS builder
+# Gradle과 JDK를 포함한 이미지 사용
+FROM gradle:7.5.1-jdk11 AS build
+
+# 작업 디렉토리 설정
 WORKDIR /app
 
-# Gradle 캐시 활용을 위해 build.gradle 및 settings.gradle만 먼저 복사
-COPY build.gradle settings.gradle gradle/ ./
-RUN gradle dependencies --no-daemon || true
-
-# 프로젝트 소스 복사 및 JAR 빌드
+# 소스 코드 복사
 COPY . .
-RUN gradle bootJar --no-daemon
 
-# 2단계: 실행 이미지
-FROM openjdk:17-jdk-slim
-WORKDIR /app
+# Gradle 빌드 실행
+RUN gradle clean build --no-daemon
 
-# 빌드 결과물 복사
-COPY --from=builder /app/build/libs/*.jar app.jar
+# 최종 이미지 설정 (필요에 따라 추가)
+FROM openjdk:11-jre-slim
+COPY --from=build /app/build/libs/your-app.jar /app.jar
 
 # 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
