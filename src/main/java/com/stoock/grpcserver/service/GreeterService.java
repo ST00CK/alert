@@ -32,12 +32,13 @@ package com.stoock.grpcserver.service;
 import com.stoock.greet.GreetProto;
 import com.stoock.greet.GreeterGrpc;
 import io.grpc.stub.StreamObserver;
+import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@GrpcService
 public class GreeterService extends GreeterGrpc.GreeterImplBase {
 
     private final List<StreamObserver<GreetProto.Notification>> clients = new ArrayList<>();
