@@ -10,7 +10,7 @@ RUN gradle clean build --no-daemon --info -g /app/gradle-cache
 
 # 최종 런타임 이미지 생성
 FROM openjdk:17
-COPY --from=build /app/build/libs/User-0.0.1-SNAPSHOT.jar /app.jar
+COPY --from=build /app/build/libs/grpcServer-0.0.1-SNAPSHOT.jar /app.jar
 
 # 애플리케이션 실행
 ENTRYPOINT ["java", "-jar", "/app.jar"]
