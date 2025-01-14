@@ -1,15 +1,12 @@
 # Gradle과 JDK를 포함한 빌드 이미지
-FROM gradle:8.0-jdk17 AS build
+FROM gradle:8.5-jdk17 AS build
 
-# Gradle 캐시 디렉토리와 권한 설정
+# 작업 디렉토리 설정 및 권한 수정
 WORKDIR /app
-RUN mkdir -p /app/gradle-cache && chmod -R 777 /app/gradle-cache
+COPY --chown=gradle:gradle . .
 
-# 프로젝트 파일 복사
-COPY . .
-
-# Gradle 빌드 실행
-RUN gradle clean build --no-daemon -g /app/gradle-cache
+# Gradle 빌드 실행 (Daemon 활성화)
+RUN gradle clean build --no-daemon --info -g /app/gradle-cache
 
 # 최종 런타임 이미지 생성
 FROM openjdk:17
