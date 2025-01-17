@@ -9,21 +9,23 @@ service Greeter {
 }
 
 message SendNotificationRequest {
-  string room_id = 1;
-  string user_id = 2;
-  string message = 3;
+  string room_id = 1;  // 방 ID
+  string user_id = 2;  // 사용자 ID
+  string message = 3;  // 메시지 내용
 }
 
 message SendNotificationResponse {
-  string status = 1;
+  string status = 1;  // 응답 상태
 }
 
 message NotificationRequest {
-  string user_id = 1;
-  string status = 2;
+  string room_id = 1;  // 방 ID
+  string user_id = 2;  // 사용자 ID
+  string message = 3;  // 메시지 내용
+  string status = 4;   // 상태
 }
 
 message NotificationResponse {
-  string user_id = 1;
-  string update = 2;
+  string user_id = 1;  // 사용자 ID
+  string update = 2;    // 알림 메시지
 }
