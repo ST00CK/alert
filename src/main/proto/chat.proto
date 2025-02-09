@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package chat;
+
+service ChatService {
+  rpc SendNotification (SendNotificationRequest) returns (SendNotificationResponse);
+  rpc StreamNotifications(stream NotificationRequest) returns (stream NotificationResponse);
+}
+
+
+message SendNotificationRequest {
+  string roomId = 1;
+  string userId = 2;
+  string message = 3;
+}
+
+message SendNotificationResponse {
+  string status = 1;
+}
+
+message NotificationRequest {
+  string roomId = 1;
+  string userId = 2;
+  string message = 3;
+}
+
+message NotificationResponse {
+  string roomId = 1;
+  string userId = 2;
+  string message = 3;
+  string timestamp = 4;
+}
