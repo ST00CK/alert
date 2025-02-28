@@ -13,13 +13,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @GrpcService
 public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
+    private final PushTokenService pushTokenService;
+    private final ExpoPushService expoPushService;
+
+    public ChatService(PushTokenService pushTokenService, ExpoPushService expoPushService) {
+        this.pushTokenService = pushTokenService;
+        this.expoPushService = expoPushService;
+    };
 
     private final List<StreamObserver<Chat.NotificationResponse>> observers = new CopyOnWriteArrayList<>();
-
-    // private final NotificationClient notificationClient;
-    // public ChatService(NotificationClient notificationClient) {
-    //     this.notificationClient = notificationClient;
-    // }
 
     @Override
     public void sendNotification(Chat.SendNotificationRequest request, StreamObserver<Chat.SendNotificationResponse> responseObserver) {
@@ -36,6 +38,18 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         System.out.println("내용  : " + message);
         System.out.println("시간  : " + timestamp);
 
+        String pushToken = pushTokenService.getPushToken(userId);
+
+        int status = 0;
+        if (pushToken != null) {
+            boolean success = expoPushService.sendPushNotification(pushToken, roomId, userId, message);
+            if (success) {
+                status = 1;
+            }
+        } else {
+            System.err.println("pushToken is null");
+        }
+
         NotificationDto dto = new NotificationDto(roomId, userId, message, timestamp);
         // notificationClient.sendNotification(dto);
 
@@ -46,12 +60,14 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
                 .setTimestamp(dto.getTimestamp())
                 .build();
 
-        for (StreamObserver<Chat.NotificationResponse> observer : observers) {
-            observer.onNext(notification);
+        synchronized (observers) {
+            for (StreamObserver<Chat.NotificationResponse> observer : observers) {
+                observer.onNext(notification);
+            }
         }
 
         Chat.SendNotificationResponse response = Chat.SendNotificationResponse.newBuilder()
-                .setStatus("success")
+                .setStatus(status)
                 .build();
 
         responseObserver.onNext(response);
