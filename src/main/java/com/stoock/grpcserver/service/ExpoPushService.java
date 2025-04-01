@@ -13,16 +13,15 @@ public class ExpoPushService {
     private static final String EXPO_PUSH_URL = "https://exp.host/--/api/v2/push/send";
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public boolean sendPushNotification(String pushToken, String roomId, String userId, String message) {
+    public boolean sendPushNotification(String pushToken, String roomId, String userId, String message, String roomName) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        String title = "채팅방 (" + roomId + ") 새로운 메시지!";
         String body = userId + ": " + message;
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("to", pushToken);
-        payload.put("title", title);
+        payload.put("title", roomName);
         payload.put("body", body);
         payload.put("sound", "default");
 
