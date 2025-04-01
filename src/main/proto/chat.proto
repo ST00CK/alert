@@ -10,7 +10,9 @@ service ChatService {
 message SendNotificationRequest {
   string roomId = 1;
   string userId = 2;
-  string message = 3;
+  string receiver = 3;
+  string message = 4;
+  string roomName = 5;
 }
 
 message SendNotificationResponse {
@@ -20,12 +22,16 @@ message SendNotificationResponse {
 message NotificationRequest {
   string roomId = 1;
   string userId = 2;
-  string message = 3;
+  string receiver = 3;
+  string message = 4;
+  string roomName = 5;
 }
 
 message NotificationResponse {
   string roomId = 1;
   string userId = 2;
-  string message = 3;
-  string timestamp = 4;
+  string receiver = 3;
+  string message = 4;
+  string roomName = 5;
+  string timestamp = 6;
 }
