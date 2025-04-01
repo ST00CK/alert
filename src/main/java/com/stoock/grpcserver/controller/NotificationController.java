@@ -8,7 +8,6 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/sse")
-@CrossOrigin(origins = "http://localhost:3000")
 public class NotificationController {
     private final EmitterRepository emitterRepository;
 
