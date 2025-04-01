@@ -9,6 +9,8 @@ import lombok.Data;
 public class NotificationDto {
     private final String roomId;
     private final String userId;
+    private final String receiver;
     private final String message;
+    private final String roomName;
     private final String timestamp;
 }
