@@ -62,6 +62,8 @@ protobuf {
     }
 }
 
+compileJava.dependsOn generateProto
+
 dependencyManagement {
     imports {
         mavenBom "org.springframework.grpc:spring-grpc-dependencies:$springGrpcVersion"
